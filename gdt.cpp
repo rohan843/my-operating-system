@@ -63,7 +63,13 @@ GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base,
          * If the limit fits within 16 bits, we set the extra 4 limit bits to 0000, and the 4 flag
          * bits to 0100.
          *
-         * TODO: Why is flag set to 0100?
+         * This means that, if limit fits within 16 bits, we'll assume the segment's limit is
+         * specified in terms of bytes instead of 4 KiB blocks.
+         * 
+         * The flag is set to 0100, meaning the granularity is 0 (the MSB) and the D/B flag is set
+         * to 1. This means that any code in this memory segment should have access to 32 - bit
+         * operations instead of 16 - bit operations, i.e., registers like EAX would be accessible
+         * and stack operations will work on 32 bit of information.
          */
         target[6] = 0x40;
     }
