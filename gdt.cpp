@@ -11,3 +11,32 @@ GlobalDescriptorTable::GlobalDescriptorTable() : nullSegmentSelector(0, 0, 0),
 
     asm volatile("lgdt (%0)" : : "p"(((uint8_t *)i) + 2));
 }
+
+GlobalDescriptorTable::~GlobalDescriptorTable()
+{
+}
+
+/**
+ * Returns a 2 byte number that contains the offset of the Data Segment Selector entry in the GDT in
+ * terms of how many bytes from the start of GDT is the data segment entry present at.
+ */
+uint16_t GlobalDescriptorTable::DataSegmentSelector()
+{
+    return (uint8_t *)&dataSegmentSelector - (uint8_t *)this;
+}
+
+/**
+ * Returns a 2 byte number that contains the offset of the Code Segment Selector entry in the GDT in
+ * terms of how many bytes from the start of GDT is the code segment entry present at.
+ */
+uint16_t GlobalDescriptorTable::CodeSegmentSelector()
+{
+    return (uint8_t *)&codeSegmentSelector - (uint8_t *)this;
+}
+
+GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base,
+                                                            uint32_t limit,
+                                                            uint8_t flags)
+{
+    uint8_t *target = (uint8_t *)this;
+}
