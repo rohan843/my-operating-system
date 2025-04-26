@@ -153,7 +153,7 @@ uint32_t GlobalDescriptorTable::SegmentDescriptor::Limit()
     result <<= 8;
     result |= target[0];
 
-    if ((target[6] & 0xF0) == 0xC0)
+    if ((target[6] & 0xC0) == 0xC0)
     {
         /**
          * Adding the 12 on bits for the case where limit was specified in terms of 4 KiB blocks.
