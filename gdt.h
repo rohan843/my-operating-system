@@ -11,6 +11,8 @@ class GlobalDescriptorTable
 {
 public:
     /**
+     * Desribes how an 8 byte segment entry looks like in the GDT.
+     * 
      * Limit: The size of the segment. (20 bits in all.)
      * Base: The base address of the segment. (32 bits in all.)
      * Type: The bits describing the type of memory segment. (8 bits in all.)
