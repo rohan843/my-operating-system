@@ -13,7 +13,9 @@ public:
     /**
      * Desribes how an 8 byte segment entry looks like in the GDT.
      * 
-     * Limit: The size of the segment. (20 bits in all.)
+     * Limit: The size of the segment. (20 bits in all.) If limit fits in 16 bits, will be treated
+     * as a count of bytes, otherwise as count of 4 KiB blocks of memory in the segment. THIS VALUE
+     * MIGHT NOT BE THE ACTUAL SIZE ALLOCATED TO THE SEGMENT. CHECK THE SIZE AFTER SEGMENT CREATION.
      * Base: The base address of the segment. (32 bits in all.)
      * Type: The bits describing the type of memory segment. (8 bits in all.)
      * Flags: The bits describing flag information. (4 bits in all.)

@@ -41,7 +41,7 @@ uint16_t GlobalDescriptorTable::CodeSegmentSelector()
 
 GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base,
                                                             uint32_t limit,
-                                                            uint8_t flags)
+                                                            uint8_t type)
 {
     uint8_t *target = (uint8_t *)this;
 
@@ -115,4 +115,17 @@ GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base,
     target[0] = (uint8_t)(limit & 0xFF);
     target[1] = (uint8_t)((limit >> 8) & 0xFF);
     target[6] |= (uint8_t)((limit >> 16) & 0x0F);
+
+    /**
+     * Setting the base pointer into the descriptor.
+     */
+    target[2] = (uint8_t)((base) & 0xFF);
+    target[3] = (uint8_t)((base >> 8) & 0xFF);
+    target[4] = (uint8_t)((base >> 16) & 0xFF);
+    target[7] = (uint8_t)((base >> 24) & 0xFF);
+
+    /**
+     * Setting the type flags into the descriptor.
+     */
+    target[5] = type;
 }
