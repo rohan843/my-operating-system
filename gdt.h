@@ -10,6 +10,12 @@ This file contains code related to the global descriptor table.
 class GlobalDescriptorTable
 {
 public:
+    /**
+     * Limit: The size of the segment. (20 bits in all.)
+     * Base: The base address of the segment. (32 bits in all.)
+     * Type: The bits describing the type of memory segment. (8 bits in all.)
+     * Flags: The bits describing flag information. (4 bits in all.)
+     */
     class SegmentDescriptor
     {
     private:
