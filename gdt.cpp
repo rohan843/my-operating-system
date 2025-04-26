@@ -11,7 +11,7 @@ GlobalDescriptorTable::GlobalDescriptorTable() : nullSegmentSelector(0, 0, 0),
 
     /**
      * Loads the information of the GDT into the GDT CPU register.
-     * 
+     *
      * TODO: Yet to elaborate on what exactly occurs.
      */
     asm volatile("lgdt (%0)" : : "p"(((uint8_t *)i) + 2));
@@ -50,7 +50,7 @@ GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base,
      * size our segments can take is limited to 2^20 bytes, i.e., to 1 MiB. This wouldn't do in our
      * case. (What if we wanted a segment to have 4 GiB, i.e., 4 * 2^30 bytes? We wouldn't be able
      * to store that here.)
-     * 
+     *
      * To prevent this problem, a solution exists. The number input to the 20 bits of limit gets
      * multiplied by 2^12, giving us 12 additional low significance bits, all 1. We essentially get
      * 20 + 12 = 32 bits, capable of making segments as large as 4 GiB. This essentially means the
@@ -62,13 +62,29 @@ GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base,
         /**
          * If the limit fits within 16 bits, we set the extra 4 limit bits to 0000, and the 4 flag
          * bits to 0100.
-         * 
+         *
          * TODO: Why is flag set to 0100?
          */
         target[6] = 0x40;
     }
     else
     {
+        /**
+         *
+         */
+        if ((limit & 0xFFF) != 0xFFF)
+        {
+            limit = (limit >> 12) - 1;
+        }
+        else
+        {
+            limit = limit >> 12;
+        }
 
+        target[6] = 0xC0;
     }
+
+    target[0] = (uint8_t)(limit & 0xFF);
+    target[1] = (uint8_t)((limit >> 8) & 0xFF);
+    target[6] |= (uint8_t)((limit >> 16) & 0x0F);
 }
