@@ -80,12 +80,12 @@ GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base,
          * According to the way we designed this system, if it is larger than what would fit in 16
          * bits, we'll assume the 12 least significant bits are all 1's, and the 20 most significant
          * bits will then be the count of 4 KiB blocks we need.
-         * 
+         *
          * The below if-else block simply checks if the lower 12 bits aren't actually all 1's, we
          * reduce the 13th lower significant bit (i.e., bit 12 if LSB was bit 0) by 1. This means
          * that we're reducing the size of this memory segment than what was asked, but are ensuring
          * we stay compliant with the 4 KiB block way of looking at the 20 high significant bits.
-         * 
+         *
          * Finally, note also that we left - shift `limit` by 12. This is (obviously) to ensure
          * `limit` reflects the count of 4 KiB blocks needed, instead of bytes needed.
          */
@@ -128,4 +128,39 @@ GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base,
      * Setting the type flags into the descriptor.
      */
     target[5] = type;
+}
+
+uint32_t GlobalDescriptorTable::SegmentDescriptor::Base()
+{
+    uint8_t *target = (uint8_t *)this;
+    uint32_t result = target[7];
+    result <<= 8;
+    result |= target[4];
+    result <<= 8;
+    result |= target[3];
+    result <<= 8;
+    result |= target[2];
+
+    return result;
+}
+
+uint32_t GlobalDescriptorTable::SegmentDescriptor::Limit()
+{
+    uint8_t *target = (uint8_t *)this;
+    uint32_t result = target[6] & 0x0F;
+    result <<= 8;
+    result |= target[1];
+    result <<= 8;
+    result |= target[0];
+
+    if ((target[6] & 0xF0) == 0xC0)
+    {
+        /**
+         * Adding the 12 on bits for the case where limit was specified in terms of 4 KiB blocks.
+         */
+        result <<= 12;
+        result |= 0x0FFF;
+    }
+
+    return result;
 }

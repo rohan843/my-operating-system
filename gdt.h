@@ -39,7 +39,8 @@ public:
         uint32_t Base();
 
         /**
-         * Returns the value of the limit for the segment.
+         * Returns the value of the limit for the segment. This is the number of bytes the segment
+         * contains.
          */
         uint32_t Limit();
     } __attribute__((packed));
