@@ -12,8 +12,9 @@
 > Each entry of the table is 8 bytes long, with a perfect backwards compatibility available, all the
 > way up to 80386 systems.
 
-4. Setup the programmable interrupt controller to ensure messages from devices such as the keyboard
-   are not blocked.
+4. Setup the background for setting up the programmable interrupt controller to ensure messages from
+   devices such as the keyboard are not blocked.
+   As part of this, we'll build some classes that help us manipulate ports.
 
 > ## PIC: Programmable Interrupt Controller
 >
@@ -23,3 +24,6 @@
 >
 > Before using the PIC, it is important to remap it to the appropriate ports, which is what we'll do
 > in this step.
+
+5. Setup the Interrupt Descriptor Table to tell the CPU how to handle the interrupts the PIC would
+   send.
