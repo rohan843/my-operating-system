@@ -1,8 +1,6 @@
 #include "types.h"
 #include "gdt.h"
 
-// BUG: The below function works weird.
-
 /**
  * @brief Prints a string to the display.
  *
@@ -48,6 +46,7 @@ void printf(char *str)
              * If '\n' encountered, we go to the next line.
              */
             y++;
+            x = 0;
         }
         if (y == 25)
         {
