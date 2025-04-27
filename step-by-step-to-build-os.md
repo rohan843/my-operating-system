@@ -12,4 +12,14 @@
 > Each entry of the table is 8 bytes long, with a perfect backwards compatibility available, all the
 > way up to 80386 systems.
 
-4.
+4. Setup the programmable interrupt controller to ensure messages from devices such as the keyboard
+   are not blocked.
+
+> ## PIC: Programmable Interrupt Controller
+>
+> It is a hardware chip that manages the devices attached to the computer, such as a keyboard, a
+> mouse, etc. It handles the interrupts from these devices to ensure the CPU isn't overwhelmed with
+> the requests.
+>
+> Before using the PIC, it is important to remap it to the appropriate ports, which is what we'll do
+> in this step.
