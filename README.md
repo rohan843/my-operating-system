@@ -27,3 +27,12 @@
 
 5. Setup the Interrupt Descriptor Table to tell the CPU how to handle the interrupts the PIC would
    send.
+
+> ## Interrupt Handlers and the Interrupt Descriptor Table
+>
+> Interrupt handlers are short and quick functions that tell the CPU what to do in case of an
+> interrupt. They are called during the execution of some other process, and therefore must ensure
+> that the registers contain the data the other process expects, once the handler returns.
+>
+> The interrupt descriptor table contains addresses and other details about what handler handles
+> what interrupt.
