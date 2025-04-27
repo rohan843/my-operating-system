@@ -1,6 +1,8 @@
 #include "types.h"
 #include "gdt.h"
 
+// BUG: The below function works weird.
+
 /**
  * @brief Prints a string to the display.
  *
