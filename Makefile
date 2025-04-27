@@ -31,3 +31,7 @@ mykernel.iso: mykernel.bin
 	grub-mkrescue --output=$@ iso
 	rm -rf iso
 	cp mykernel.iso /media/sf_Common_VM_Shared_Data
+
+.PHONY: clean
+clean:
+	rm -f $(objects) mykernel.bin mykernel.iso
