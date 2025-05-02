@@ -34,6 +34,16 @@ protected:
      */
     static GateDescriptor interruptDescriptorTable[256];
 
+    /**
+     * @brief Set the Interrupt Descriptor Table Entry for an interrupt.
+     *
+     * @param interruptNumber The number of the interrupt (0-255)
+     * @param codeSegmentSelectorOffset The offset in number of bytes of the code segment descriptor
+     * in the GDT.
+     * @param handler Pointer to the interrupt handler function.
+     * @param DescriptorPriveledgeLevel Flag
+     * @param DescriptorType Flag
+     */
     static void SetInterruptDescriptorTableEntry(
         uint8_t interruptNumber,
         uint16_t codeSegmentSelectorOffset,
