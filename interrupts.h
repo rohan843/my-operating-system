@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "port.h"
+#include "gdt.h"
 
 class InterruptManager
 {
@@ -24,14 +25,17 @@ protected:
 
     /**
      * @brief The interrupt descriptor table array.
-     * 
-     * This array contains pointers to interrupt handlers for the 256 interrupts (32 exceptions, 
+     *
+     * This array contains pointers to interrupt handlers for the 256 interrupts (32 exceptions,
      * 16 hardware interrupts and 208 software interrupts).
-     * 
+     *
      */
     static GateDescriptor interruptDescriptorTable[256];
 
 public:
+    InterruptManager(GlobalDescriptorTable *gdt);
+    ~InterruptManager();
+
     /**
      * @brief
      *
