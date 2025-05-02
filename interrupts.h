@@ -13,6 +13,8 @@ protected:
      *
      * This is an 8 byte object that describes the address of the interrupt handler, the relevant
      * code segment's offset in the GDT and access rights of the handler.
+     *
+     * Gate Descriptor is a common name for such an entry.
      */
     struct GateDescriptor
     {
@@ -31,6 +33,13 @@ protected:
      *
      */
     static GateDescriptor interruptDescriptorTable[256];
+
+    static void SetInterruptDescriptorTableEntry(
+        uint8_t interruptNumber,
+        uint16_t codeSegmentSelectorOffset,
+        void (*handler)(),
+        uint8_t DescriptorPriveledgeLevel,
+        uint8_t DescriptorType);
 
 public:
     InterruptManager(GlobalDescriptorTable *gdt);
@@ -54,6 +63,8 @@ public:
      * @brief The keyboard interrupt handler.
      */
     static void HandleInterruptRequest0x01();
+
+    static void IgnoreInterruptRequest();
 };
 
 #endif
