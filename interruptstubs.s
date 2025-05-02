@@ -3,6 +3,13 @@
 .extern _ZN16InterruptManager15handleInterruptEhj ; // Comes from `nm interrupts.o`
 
 
+.macro HandleInterruptRequest num
+.global _ZN16InterruptManager26handleInterruptRequest\num\()Ev
+    movb $\num, (interruptnumber)
+    jmp int_bottom
+.endm
+
+
 int_bottom:
     pusha
     pushl %ds

@@ -15,6 +15,16 @@ public:
      * @return uint32_t
      */
     static uint32_t handleInterrupt(uint8_t interruptNumber, uint32_t esp);
+
+    /**
+     * @brief The timer interrupt handler.
+     */
+    static void HandleInterruptRequest0x00();
+
+    /**
+     * @brief The keyboard interrupt handler.
+     */
+    static void HandleInterruptRequest0x01();
 };
 
 #endif
