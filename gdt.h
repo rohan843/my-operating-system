@@ -54,7 +54,18 @@ public:
     GlobalDescriptorTable();
     ~GlobalDescriptorTable();
 
+    /**
+     * @brief Returns a 2 byte number that contains the offset of the Code Segment Selector entry in
+     * the GDT in terms of how many bytes from the start of GDT is the code segment entry present
+     * at.
+     */
     uint16_t CodeSegmentSelector();
+
+    /**
+     * @brief Returns a 2 byte number that contains the offset of the Data Segment Selector entry in
+     * the GDT in terms of how many bytes from the start of GDT is the data segment entry present
+     * at.
+     */
     uint16_t DataSegmentSelector();
 };
 
