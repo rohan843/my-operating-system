@@ -6,6 +6,31 @@
 
 class InterruptManager
 {
+protected:
+    /**
+     * @brief An entry of the interrupt descriptor table.
+     *
+     * This is an 8 byte object that describes the address of the interrupt handler, the relevant
+     * code segment's offset in the GDT and access rights of the handler.
+     */
+    struct GateDescriptor
+    {
+        uint16_t handlerAddressLowBits;
+        uint16_t gdt_codeSegmentSelector;
+        uint8_t reserved;
+        uint8_t access;
+        uint16_t handlerAddressHighBits;
+    } __attribute__((packed));
+
+    /**
+     * @brief The interrupt descriptor table array.
+     * 
+     * This array contains pointers to interrupt handlers for the 256 interrupts (32 exceptions, 
+     * 16 hardware interrupts and 208 software interrupts).
+     * 
+     */
+    static GateDescriptor interruptDescriptorTable[256];
+
 public:
     /**
      * @brief
