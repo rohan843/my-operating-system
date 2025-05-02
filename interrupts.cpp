@@ -20,11 +20,40 @@ void InterruptManager::SetInterruptDescriptorTableEntry(
     interruptDescriptorTable[interruptNumber].gdt_codeSegmentSelector = codeSegmentSelectorOffset;
     interruptDescriptorTable[interruptNumber].reserved = 0;
     interruptDescriptorTable[interruptNumber].access =
-        IDT_DESC_PRESENT | DescriptorType | DescriptorPriveledgeLevel;
+        IDT_DESC_PRESENT | DescriptorType | ((DescriptorPriveledgeLevel & 0b11) << 5);
 }
 
 InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
 {
+    uint16_t CodeSegment = gdt->CodeSegmentSelector();
+    const uint8_t IDT_INTERRUPT_GATE = 0xE;
+
+    /**
+     * Setting up initially that all interrupts be ignored.
+     */
+    for (uint8_t i = 0; i < 256; i++)
+    {
+        this->SetInterruptDescriptorTableEntry(
+            i,
+            CodeSegment,
+            &this->IgnoreInterruptRequest,
+            0,
+            IDT_INTERRUPT_GATE);
+    }
+
+    this->SetInterruptDescriptorTableEntry(
+        0x20,
+        CodeSegment,
+        &this->HandleInterruptRequest0x00,
+        0,
+        IDT_INTERRUPT_GATE);
+
+    this->SetInterruptDescriptorTableEntry(
+        0x21,
+        CodeSegment,
+        &this->HandleInterruptRequest0x01,
+        0,
+        IDT_INTERRUPT_GATE);
 }
 
 InterruptManager::~InterruptManager()
