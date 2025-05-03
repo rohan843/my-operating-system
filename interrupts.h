@@ -26,6 +26,23 @@ protected:
     } __attribute__((packed));
 
     /**
+     * @brief A 6 - byte structure pointing to the IDT.
+     *
+     */
+    struct InterruptDescriptorTablePointer
+    {
+        /**
+         * @brief The size in bytes of the table.
+         */
+        uint16_t size;
+
+        /**
+         * @brief The base address of the table.
+         */
+        uint32_t base;
+    } __attribute__((packed));
+
+    /**
      * @brief The interrupt descriptor table array.
      *
      * This array contains pointers to interrupt handlers for the 256 interrupts (32 exceptions,

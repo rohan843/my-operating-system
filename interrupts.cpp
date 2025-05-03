@@ -41,6 +41,9 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
             IDT_INTERRUPT_GATE);
     }
 
+    /**
+     * Timer interrupt.
+     */
     this->SetInterruptDescriptorTableEntry(
         0x20,
         CodeSegment,
@@ -48,12 +51,19 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
         0,
         IDT_INTERRUPT_GATE);
 
+    /**
+     * Keyboard interrupt.
+     */
     this->SetInterruptDescriptorTableEntry(
         0x21,
         CodeSegment,
         &this->HandleInterruptRequest0x01,
         0,
         IDT_INTERRUPT_GATE);
+
+    InterruptDescriptorTablePointer idt;
+    idt.size = 256 * sizeof(GateDescriptor) - 1; // TODO: Why "-1"?
+    idt.base = (uint32_t)interruptDescriptorTable;
 }
 
 InterruptManager::~InterruptManager()
