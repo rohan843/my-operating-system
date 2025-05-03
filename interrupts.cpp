@@ -23,7 +23,10 @@ void InterruptManager::SetInterruptDescriptorTableEntry(
         IDT_DESC_PRESENT | DescriptorType | ((DescriptorPriveledgeLevel & 0b11) << 5);
 }
 
-InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
+InterruptManager::InterruptManager(GlobalDescriptorTable *gdt) : picMasterCommand(0x20),
+                                                                 picMasterData(0x21),
+                                                                 picSlaveCommand(0xA0),
+                                                                 picSlaveData(0xA1)
 {
     uint16_t CodeSegment = gdt->CodeSegmentSelector();
     const uint8_t IDT_INTERRUPT_GATE = 0xE;
@@ -60,6 +63,32 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
         &this->HandleInterruptRequest0x01,
         0,
         IDT_INTERRUPT_GATE);
+
+    picMasterCommand.Write(0x11);
+    picSlaveCommand.Write(0x11);
+
+    /**
+     * Telling the master PIC - 0x20 should be added to any interrupt. (8 initial hardware
+     * interrupts come from the master PIC.)
+     */
+    picMasterData.Write(0x20);
+    /**
+     * Telling the slave PIC - 0x28 should be added to any interrupt. (8 final hardware interrupts
+     * come from the slave PIC.)
+     */
+    picSlaveData.Write(0x28);
+
+    /**
+     * The following 2 lines initialize the master as the master and the slave as the slave.
+     */
+    picMasterData.Write(0x04);
+    picSlaveData.Write(0x02);
+
+    picMasterData.Write(0x01);
+    picSlaveData.Write(0x01);
+
+    picMasterData.Write(0x00);
+    picSlaveData.Write(0x00);
 
     InterruptDescriptorTablePointer idt;
 
