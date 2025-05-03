@@ -9,7 +9,6 @@
 .section .text
 
 .extern _ZN16InterruptManager15handleInterruptEhj # Comes from `nm interrupts.o`
-.extern _ZN16InterruptManager22IgnoreInterruptRequestEv
 
 .macro HandleException num
 .global _ZN16InterruptManager16handleException\num\()Ev
@@ -48,6 +47,9 @@ int_bottom:
     popl %ds
     popa
 
+# .extern <symbol> -> This symbol is defined elsewhere.
+# .global <symbol> -> This symbol is defined here.
+.global _ZN16InterruptManager22IgnoreInterruptRequestEv
 _ZN16InterruptManager22IgnoreInterruptRequestEv:
     iret
 
