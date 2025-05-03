@@ -34,10 +34,10 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt) : picMasterComman
     /**
      * Setting up initially that all interrupts be ignored.
      */
-    for (uint8_t i = 0; i < 256; i++)
+    for (uint16_t i = 0; i < 256; i++)
     {
         this->SetInterruptDescriptorTableEntry(
-            i,
+            (uint8_t)i,
             CodeSegment,
             &this->IgnoreInterruptRequest,
             0,
