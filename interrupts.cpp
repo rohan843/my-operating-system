@@ -62,12 +62,22 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
         IDT_INTERRUPT_GATE);
 
     InterruptDescriptorTablePointer idt;
-    idt.size = 256 * sizeof(GateDescriptor) - 1; // TODO: Why "-1"?
+
+    // Why "-1"?: See comment of InterruptDescriptorTablePointer::size
+    idt.size = 256 * sizeof(GateDescriptor) - 1;
+
     idt.base = (uint32_t)interruptDescriptorTable;
+
+    asm volatile("lidt %0" : : "m"(idt));
 }
 
 InterruptManager::~InterruptManager()
 {
+}
+
+void InterruptManager::Activate()
+{
+    asm volatile("sti"); // "Start Interrupts"
 }
 
 uint32_t InterruptManager::handleInterrupt(uint8_t interruptNumber, uint32_t esp)

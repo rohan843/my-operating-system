@@ -1,5 +1,6 @@
 #include "types.h"
 #include "gdt.h"
+#include "interrupts.h"
 
 /**
  * @brief Prints a string to the display.
@@ -96,6 +97,10 @@ extern "C" void kernelMain(const void *multiboot_structure, uint32_t magicnumber
     printf("Run #1\n");
 
     GlobalDescriptorTable gdt;
+    InterruptManager interrupts(&gdt);
+
+    // Begin processing interrupts.
+    interrupts.Activate();
 
     while (1)
         ;

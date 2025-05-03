@@ -32,7 +32,7 @@ protected:
     struct InterruptDescriptorTablePointer
     {
         /**
-         * @brief The size in bytes of the table.
+         * @brief The byte offset of the last byte in IDT. (Calculated as size - 1.)
          */
         uint16_t size;
 
@@ -71,6 +71,11 @@ protected:
 public:
     InterruptManager(GlobalDescriptorTable *gdt);
     ~InterruptManager();
+
+    /**
+     * @brief Tells the processor to begin processing interrupts.
+     */
+    void Activate();
 
     /**
      * @brief
