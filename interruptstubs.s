@@ -1,9 +1,9 @@
-; There are three kinds of interrupts:
-; 1. Exceptions (0 to 31) - Created by the CPU, hardcoded
-; 2. Hardware Interrupts (32 to 47) - Created by the PIC
-; 3. Software Interrupts (48 to 255) - Created by code, typically by the OS
+# There are three kinds of interrupts:
+# 1. Exceptions (0 to 31) - Created by the CPU, hardcoded
+# 2. Hardware Interrupts (32 to 47) - Created by the PIC
+# 3. Software Interrupts (48 to 255) - Created by code, typically by the OS
 
-; The following variable essentially says IRQs (interrupt requests) begin 0x20, or, 32 onwards.
+# The following variable essentially says IRQs (interrupt requests) begin 0x20, or, 32 onwards.
 .set IRQ_BASE, 0x20
 
 .section .text

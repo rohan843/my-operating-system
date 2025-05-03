@@ -75,6 +75,10 @@ InterruptManager::~InterruptManager()
 {
 }
 
+void InterruptManager::IgnoreInterruptRequest()
+{
+}
+
 void InterruptManager::Activate()
 {
     asm volatile("sti"); // "Start Interrupts"
