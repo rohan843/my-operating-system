@@ -88,14 +88,22 @@ public:
 
     /**
      * @brief The timer interrupt handler.
+     * This is defined in assembly in the file "interruptstubs.s"
      */
     static void HandleInterruptRequest0x00();
 
     /**
      * @brief The keyboard interrupt handler.
+     *
+     * This is defined in assembly in the file "interruptstubs.s"
      */
     static void HandleInterruptRequest0x01();
 
+    /**
+     * @brief Ignores a given interrupt.
+     *
+     * This is defined in assembly in the file "interruptstubs.s"
+     */
     static void IgnoreInterruptRequest();
 };
 
