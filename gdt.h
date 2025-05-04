@@ -67,6 +67,6 @@ public:
      * at.
      */
     uint16_t DataSegmentSelector();
-};
+} __attribute__((packed));
 
 #endif
