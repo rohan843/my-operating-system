@@ -70,13 +70,24 @@ void printf(char *str)
 }
 
 /**
- * This piece of code runs all the C++ constructors.
+ * This piece of code runs all the C++ constructors for any global or static objects.
+ * 
+ * start_ctors and end_ctors are defined as labels in the linker.ld file.
  */
 typedef void (*constructor)();
 extern "C" constructor start_ctors;
 extern "C" constructor end_ctors;
+
+/**
+ * @brief Runs all the constuctors for initialized global or static objects.
+ */
 extern "C" void callConstructors()
 {
+    /**
+     * `c` is a pointer to a function pointer. `c` points into an array of function pointers, each
+     * of which points to a constuctor. `c` causes these constructors to execute, based on the code
+     * block in the loop, thereby initializing the global and static objects.
+     */
     for (constructor *c = &start_ctors; c != &end_ctors; c++)
     {
         (*c)();

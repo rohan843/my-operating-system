@@ -30,6 +30,9 @@ SECTIONS
         # This line sets start_ctors to be a label pointing to the current memory location.
         start_ctors = .;
 
+        # The following `init_array` sections and sub-sections contain an _array_ of pointers,
+        # pointing to relevant constructors.
+
         # This line ensures all the `init_array` sections are preserved.
         KEEP(*( .init_array ));
 
