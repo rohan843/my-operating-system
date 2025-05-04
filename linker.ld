@@ -27,9 +27,17 @@ SECTIONS
     # Contains initialized global and static variables.
     .data :
     {
+        # This line sets start_ctors to be a label pointing to the current memory location.
         start_ctors = .;
+
+        # This line ensures all the `init_array` sections are preserved.
         KEEP(*( .init_array ));
+
+        # This line ensures all the sub-sections under the `init_array` sections are preserved, with
+        # any pre-defined priority order.
         KEEP(*(SORT_BY_INIT_PRIORITY( .init_array.* )));
+
+        # This line sets end_ctors to be a label pointing to the current memory location.
         end_ctors = .;
 
         *(.data)
