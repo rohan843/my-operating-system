@@ -4,6 +4,8 @@ void printf(char *str);
 
 InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256];
 
+InterruptManager *InterruptManager::ActiveInterruptManager = 0;
+
 void InterruptManager::SetInterruptDescriptorTableEntry(
     uint8_t interruptNumber,
     uint16_t codeSegmentSelectorOffset,
@@ -123,12 +125,39 @@ InterruptManager::~InterruptManager()
 
 void InterruptManager::Activate()
 {
-    asm volatile("sti"); // "Start Interrupts"
+    /**
+     * _Technically_, we can only have 1 interrupt manager object, as we can have only 1 IDT. The
+     * following if clause ensures if somehow `Activate` gets called again, we first deactivate
+     * interrupts.
+     */
+    if (ActiveInterruptManager != 0)
+    {
+        this->Deactivate();
+    }
+    ActiveInterruptManager = this;
+    asm volatile("sti"); // Starts Interrupts
+}
+
+void InterruptManager::Deactivate()
+{
+    /**
+     * If the active interrupt manager calls deactivate, we deactivate it.
+     */
+    if (ActiveInterruptManager == this)
+    {
+        ActiveInterruptManager = 0;
+        asm volatile("cli"); // Stops Interrupts
+    }
 }
 
 uint32_t InterruptManager::handleInterrupt(uint8_t interruptNumber, uint32_t esp)
 {
     printf(" Interrupt!");
 
-    return esp; // for now.
+    /**
+     * This restores the value of stack pointer when we return.
+     *
+     * This is NOT a good approach.
+     */
+    return esp;
 }

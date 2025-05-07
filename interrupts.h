@@ -9,6 +9,11 @@ class InterruptManager
 {
 protected:
     /**
+     * Points to the (single) Interrupt Manager object created.
+     */
+    static InterruptManager *ActiveInterruptManager;
+
+    /**
      * @brief An entry of the interrupt descriptor table.
      *
      * This is an 8 byte object that describes the address of the interrupt handler, the relevant
@@ -67,7 +72,7 @@ protected:
         void (*handler)(),
         uint8_t DescriptorPriveledgeLevel,
         uint8_t DescriptorType);
-    
+
     Port8BitSlow picMasterCommand;
     Port8BitSlow picMasterData;
     Port8BitSlow picSlaveCommand;
@@ -83,6 +88,11 @@ public:
     void Activate();
 
     /**
+     * @brief Stops interrupts from being processed.
+     */
+    void Deactivate();
+
+    /**
      * @brief
      *
      * @param interruptNumber The number of the interrupt that occurred.
@@ -90,6 +100,8 @@ public:
      * @return uint32_t
      */
     static uint32_t handleInterrupt(uint8_t interruptNumber, uint32_t esp);
+
+    uint32_t DoHandleInterrupt(uint8_t interruptNumber, uint32_t esp);
 
     /**
      * @brief The timer interrupt handler.
