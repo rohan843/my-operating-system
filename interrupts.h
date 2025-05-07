@@ -5,11 +5,22 @@
 #include "port.h"
 #include "gdt.h"
 
+/**
+ * @brief The Interrupt Manager class.
+ *
+ * This class specifies an object containing the interrupt descriptor table and various helpful
+ * methods.
+ *
+ * This class must be instantiated once. In case of multiple instances, all will share the IDT and
+ * the object activated last will be pointed to by `ActiveInterruptManager`.
+ *
+ */
 class InterruptManager
 {
 protected:
     /**
-     * Points to the (single) Interrupt Manager object created.
+     * Points to the (single) Interrupt Manager object created. (Currently active object in case
+     * multiple such objects got created.)
      */
     static InterruptManager *ActiveInterruptManager;
 
@@ -93,14 +104,25 @@ public:
     void Deactivate();
 
     /**
-     * @brief
+     * @brief A static method that handles interrupts. Calls the `DoHandleInterrupt` method of the
+     * currently active interrupt manager object.
      *
+     * Is is important to have this as the assembly code calls this function, but this function
+     * can't access the port objects as they aren't static.
+     * 
      * @param interruptNumber The number of the interrupt that occurred.
      * @param esp The current stack pointer.
-     * @return uint32_t
+     * @return The stack pointer as it was before the handler was called.
      */
     static uint32_t handleInterrupt(uint8_t interruptNumber, uint32_t esp);
 
+    /**
+     * @brief A non-static method handling interrupts.
+     * 
+     * @param interruptNumber 
+     * @param esp 
+     * @return uint32_t 
+     */
     uint32_t DoHandleInterrupt(uint8_t interruptNumber, uint32_t esp);
 
     /**

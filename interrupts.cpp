@@ -152,12 +152,42 @@ void InterruptManager::Deactivate()
 
 uint32_t InterruptManager::handleInterrupt(uint8_t interruptNumber, uint32_t esp)
 {
-    printf(" Interrupt!");
+    /**
+     * Calls the `DoHandleInterrupt` method of the currently active interrupt manager (if one
+     * exists), otherwise simply returns.
+     */
+    if (ActiveInterruptManager != 0)
+    {
+        return ActiveInterruptManager->DoHandleInterrupt(interruptNumber, esp);
+    }
 
     /**
      * This restores the value of stack pointer when we return.
      *
      * This is NOT a good approach.
      */
+    return esp;
+}
+
+uint32_t InterruptManager::DoHandleInterrupt(uint8_t interruptNumber, uint32_t esp)
+{
+    printf("\nInterrupt!");
+    if (0x20 <= interruptNumber && interruptNumber <= 0x2F)
+    {
+        /**
+         * If the interrupt came from slave, this sends EOI (end of interrupt) to it, unmasking that
+         * interrupt line.
+         */
+        if (0x28 <= interruptNumber)
+        {
+            this->picSlaveCommand.Write(0x20);
+        }
+        /**
+         * The master is asked to unmask its interrupt line (in case the slave sent the interrupt,
+         * IRQ2 of the master gets occupied, i.e., interrupt number 0x22, so even that has to be
+         * cleared).
+         */
+        this->picMasterCommand.Write(0x20);
+    }
     return esp;
 }
