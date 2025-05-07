@@ -58,8 +58,8 @@ protected:
      * @param codeSegmentSelectorOffset The offset in number of bytes of the code segment descriptor
      * in the GDT.
      * @param handler Pointer to the interrupt handler function.
-     * @param DescriptorPriveledgeLevel Flag
-     * @param DescriptorType Flag
+     * @param DescriptorPriveledgeLevel Goes from 0 to 3. Lower = more priveledge, 0 for kernel.
+     * @param DescriptorType Type of gate (interrupt = 0xE, trap = 0xF, etc.)
      */
     static void SetInterruptDescriptorTableEntry(
         uint8_t interruptNumber,

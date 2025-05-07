@@ -12,6 +12,10 @@ void InterruptManager::SetInterruptDescriptorTableEntry(
     uint8_t DescriptorType)
 {
 
+    /**
+     * Sets bit 7 in `access` flag to 1. This is the `Present Bit`, which must be `1` for a
+     * valid entry.
+     */
     const uint8_t IDT_DESC_PRESENT = 0x80;
 
     interruptDescriptorTable[interruptNumber].handlerAddressLowBits = ((uint32_t)handler) & 0xFFFF;
@@ -29,6 +33,9 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt) : picMasterComman
                                                                  picSlaveData(0xA1)
 {
     uint16_t CodeSegment = gdt->CodeSegmentSelector();
+    /**
+     * Flag marking a gate as an interrupt gate.
+     */
     const uint8_t IDT_INTERRUPT_GATE = 0xE;
 
     /**
@@ -64,6 +71,10 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt) : picMasterComman
         0,
         IDT_INTERRUPT_GATE);
 
+    /**
+     * Initializes the 2 PICs to operate in cascade mode. They will expect 3 more control words (
+     * sent below).
+     */
     picMasterCommand.Write(0x11);
     picSlaveCommand.Write(0x11);
 
@@ -84,9 +95,15 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt) : picMasterComman
     picMasterData.Write(0x04);
     picSlaveData.Write(0x02);
 
+    /**
+     * Sets the interrupts to the 8086/88 mode.
+     */
     picMasterData.Write(0x01);
     picSlaveData.Write(0x01);
 
+    /**
+     * Unmasks all IRQ lines, enabling all interrupts.
+     */
     picMasterData.Write(0x00);
     picSlaveData.Write(0x00);
 
