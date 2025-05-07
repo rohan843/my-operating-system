@@ -5,17 +5,9 @@ GlobalDescriptorTable::GlobalDescriptorTable() : nullSegmentSelector(0, 0, 0),
                                                  codeSegmentSelector(0, 64 * 1024 * 1024, 0x9A),
                                                  dataSegmentSelector(0, 64 * 1024 * 1024, 0x92)
 {
-    // uint32_t i[2];
-    // i[0] = (uint32_t)this;
-    // i[1] = sizeof(GlobalDescriptorTable) << 16;
-
     /**
-     * Loads the information of the GDT into the GDT CPU register.
-     *
-     * TODO: Yet to elaborate on what exactly occurs.
+     * @brief A 6-byte struct containing the byte vector to be loaded into the GDTR.
      */
-    // asm volatile("lgdt (%0)" : : "p"(((uint8_t *)i) + 2));
-
     struct GDTPointer
     {
         uint16_t limit;
@@ -27,6 +19,9 @@ GlobalDescriptorTable::GlobalDescriptorTable() : nullSegmentSelector(0, 0, 0),
     ptr.limit = sizeof(GlobalDescriptorTable) - 1;
     ptr.base = (uint32_t)this;
 
+    /**
+     * @brief Loads the contents of above GDT Pointer into the GDTR.
+     */
     asm volatile("lgdt %0" : : "m"(ptr));
 
 }
