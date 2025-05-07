@@ -5,6 +5,24 @@
 #include "port.h"
 #include "gdt.h"
 
+class InterruptManager;
+
+class InterruptHandler
+{
+protected:
+    uint8_t interruptNumber;
+    InterruptManager *interruptManager;
+
+    /**
+     * @brief Construct a new Interrupt Handler object
+     *
+     * Made protected to ensure this class never gets instantiated.
+     *
+     */
+    InterruptHandler(uint8_t interruptNumber, InterruptManager *interruptManager);
+    ~InterruptHandler();
+};
+
 /**
  * @brief The Interrupt Manager class.
  *
@@ -109,7 +127,7 @@ public:
      *
      * Is is important to have this as the assembly code calls this function, but this function
      * can't access the port objects as they aren't static.
-     * 
+     *
      * @param interruptNumber The number of the interrupt that occurred.
      * @param esp The current stack pointer.
      * @return The stack pointer as it was before the handler was called.
@@ -118,10 +136,10 @@ public:
 
     /**
      * @brief A non-static method handling interrupts.
-     * 
-     * @param interruptNumber 
-     * @param esp 
-     * @return uint32_t 
+     *
+     * @param interruptNumber
+     * @param esp
+     * @return uint32_t
      */
     uint32_t DoHandleInterrupt(uint8_t interruptNumber, uint32_t esp);
 

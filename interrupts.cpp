@@ -171,7 +171,14 @@ uint32_t InterruptManager::handleInterrupt(uint8_t interruptNumber, uint32_t esp
 
 uint32_t InterruptManager::DoHandleInterrupt(uint8_t interruptNumber, uint32_t esp)
 {
-    printf("\nInterrupt!");
+    if (interruptNumber != 0x20)
+    {
+        printf("\nInterrupt!");
+    }
+
+    /**
+     * Sending end of interrupt messages to the PICs.
+     */
     if (0x20 <= interruptNumber && interruptNumber <= 0x2F)
     {
         /**
