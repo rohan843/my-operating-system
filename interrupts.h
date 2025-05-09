@@ -16,7 +16,9 @@ protected:
     /**
      * @brief Construct a new Interrupt Handler object
      *
-     * Made protected to ensure this class never gets instantiated.
+     * Made protected to ensure this class never gets instantiated directly. When a child's
+     * constructor calls this constructor, it automatically registers it with the InterruptManager
+     * provided, for the interrupt whose number is provided.
      *
      */
     InterruptHandler(uint8_t interruptNumber, InterruptManager *interruptManager);
@@ -53,7 +55,7 @@ protected:
      */
     static InterruptManager *ActiveInterruptManager;
 
-    InterruptHandler* handlers[256];
+    InterruptHandler *handlers[256];
 
     /**
      * @brief An entry of the interrupt descriptor table.
