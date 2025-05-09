@@ -2,6 +2,27 @@
 
 void printf(char *str);
 
+InterruptHandler::InterruptHandler(uint8_t interruptNumber, InterruptManager *interruptManager)
+{
+    this->interruptNumber = interruptNumber;
+    this->interruptManager = interruptManager;
+
+    this->interruptManager->handlers[interruptNumber] = this;
+}
+
+InterruptHandler::~InterruptHandler()
+{
+    if (this->interruptManager->handlers[interruptNumber] == this)
+    {
+        this->interruptManager->handlers[interruptNumber] = 0;
+    }
+}
+
+uint32_t InterruptHandler::HandleInterrupt(uint32_t esp)
+{
+    return esp;
+}
+
 InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256];
 
 InterruptManager *InterruptManager::ActiveInterruptManager = 0;
@@ -45,6 +66,7 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt) : picMasterComman
      */
     for (uint16_t i = 0; i < 256; i++)
     {
+        this->handlers[i] = 0;
         this->SetInterruptDescriptorTableEntry(
             (uint8_t)i,
             CodeSegment,
@@ -171,9 +193,20 @@ uint32_t InterruptManager::handleInterrupt(uint8_t interruptNumber, uint32_t esp
 
 uint32_t InterruptManager::DoHandleInterrupt(uint8_t interruptNumber, uint32_t esp)
 {
-    if (interruptNumber != 0x20)
+    /**
+     * Use an interrupt handler if one exists, otherwise print a message.
+     */
+    if (this->handlers[interruptNumber] != 0)
     {
-        printf("\nInterrupt!");
+        esp = this->handlers[interruptNumber]->HandleInterrupt(esp);
+    }
+    else if (interruptNumber != 0x20)
+    {
+        char *str = "\nUnhandled Interrupt 0x__";
+        char *hex = "0123456789ABCDEF";
+        str[23] = hex[(interruptNumber >> 4) & 0xF];
+        str[24] = hex[interruptNumber & 0xF];
+        printf(str);
     }
 
     /**

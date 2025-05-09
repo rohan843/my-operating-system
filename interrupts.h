@@ -21,6 +21,15 @@ protected:
      */
     InterruptHandler(uint8_t interruptNumber, InterruptManager *interruptManager);
     ~InterruptHandler();
+
+public:
+    /**
+     * @brief Handles the interrupt associated with an inherited object.
+     *
+     * @param esp The value of the stack pointer before the interrupt handling began.
+     * @return The value of the stack pointer before the interrupt handling began.
+     */
+    uint32_t HandleInterrupt(uint32_t esp);
 };
 
 /**
@@ -35,12 +44,16 @@ protected:
  */
 class InterruptManager
 {
+    friend class InterruptHandler;
+
 protected:
     /**
      * Points to the (single) Interrupt Manager object created. (Currently active object in case
      * multiple such objects got created.)
      */
     static InterruptManager *ActiveInterruptManager;
+
+    InterruptHandler* handlers[256];
 
     /**
      * @brief An entry of the interrupt descriptor table.
