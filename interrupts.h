@@ -29,7 +29,7 @@ public:
      * @param esp The value of the stack pointer before the interrupt handling began.
      * @return The value of the stack pointer before the interrupt handling began.
      */
-    uint32_t HandleInterrupt(uint32_t esp);
+    virtual uint32_t HandleInterrupt(uint32_t esp);
 };
 
 /**
