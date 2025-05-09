@@ -50,10 +50,11 @@ void InterruptManager::SetInterruptDescriptorTableEntry(
         IDT_DESC_PRESENT | DescriptorType | ((DescriptorPriveledgeLevel & 0b11) << 5);
 }
 
-InterruptManager::InterruptManager(GlobalDescriptorTable *gdt) : picMasterCommand(0x20),
-                                                                 picMasterData(0x21),
-                                                                 picSlaveCommand(0xA0),
-                                                                 picSlaveData(0xA1)
+InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
+    : picMasterCommand(0x20),
+      picMasterData(0x21),
+      picSlaveCommand(0xA0),
+      picSlaveData(0xA1)
 {
     uint16_t CodeSegment = gdt->CodeSegmentSelector();
     /**
