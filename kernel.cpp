@@ -1,6 +1,7 @@
 #include "types.h"
 #include "gdt.h"
 #include "interrupts.h"
+#include "keyboard.h"
 
 /**
  * @brief Prints a string to the display.
@@ -109,6 +110,7 @@ extern "C" void kernelMain(const void *multiboot_structure, uint32_t magicnumber
 
     GlobalDescriptorTable gdt;
     InterruptManager interrupts(&gdt);
+    KeyboardDriver keyboard(&interrupts);
 
     // Begin processing interrupts, once the hardware has been initialized above.
     interrupts.Activate();

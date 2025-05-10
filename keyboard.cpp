@@ -22,6 +22,31 @@ KeyboardDriver::KeyboardDriver(InterruptManager *manager)
      * Tells the keyboard controller to start sending data to the CPU (through the PIC interrupts).
      */
     commandport.Write(0xAE);
+
+    /**
+     * Gets the current state of the keyboard controller's status byte on the data port.
+     */
+    commandport.Write(0x20);
+
+    /**
+     * Stores the state of the PS/2 controller, and:
+     * 
+     * 1. Sets the bit 0 to 1. This enables keyboard interrupts (IRQ1).
+     * 2. Unsets the bit 4 to 0. This enables keyboard clock.
+     */
+    uint8_t status = (dataport.Read() | 0b1) & (~0x10);
+
+    /**
+     * Change the status byte and write the new one to the controller.
+     */
+    commandport.Write(0x60);
+    dataport.Write(status);
+
+    /**
+     * Asks the keyboard to begin sending keypress scan codes.
+     */
+    dataport.Write(0xF4);
+
 }
 
 KeyboardDriver::~KeyboardDriver()
