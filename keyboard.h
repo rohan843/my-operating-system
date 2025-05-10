@@ -8,6 +8,9 @@
  * the byte. (For e.g., the byte could be a key scan code, an acknowledgement from the keyboard,
  * or something else.)
  * 
+ * @note In actual hardware, we have a different set of connections that reach the keyboard. There
+ * might be USB connections or other connections, and this driver currently doesn't consider them.
+ * 
  */
 
 #ifndef __KEYBOARD_H
