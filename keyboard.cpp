@@ -9,11 +9,11 @@ KeyboardDriver::KeyboardDriver(InterruptManager *manager)
 {
     /**
      * Flushes the keyboard controller's output buffer before the keyboard driver starts.
-     * 
+     *
      * The condition below checks the bit 0 of the command port. If it is set, that means data is
      * present in the keyboard's output buffer.
      */
-    while(commandport.Read() & 0x1)
+    while (commandport.Read() & 0x1)
     {
         dataport.Read();
     }
@@ -30,7 +30,7 @@ KeyboardDriver::KeyboardDriver(InterruptManager *manager)
 
     /**
      * Stores the state of the PS/2 controller, and:
-     * 
+     *
      * 1. Sets the bit 0 to 1. This enables keyboard interrupts (IRQ1).
      * 2. Unsets the bit 4 to 0. This enables keyboard clock.
      */
@@ -46,7 +46,6 @@ KeyboardDriver::KeyboardDriver(InterruptManager *manager)
      * Asks the keyboard to begin sending keypress scan codes.
      */
     dataport.Write(0xF4);
-
 }
 
 KeyboardDriver::~KeyboardDriver()
@@ -56,10 +55,36 @@ KeyboardDriver::~KeyboardDriver()
 uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
 {
     uint8_t key = dataport.Read();
-    char *str = "\nKeyboard: 0x__";
-    char *hex = "0123456789ABCDEF";
-    str[13] = hex[(key >> 4) & 0xF];
-    str[14] = hex[key & 0xF];
-    printf(str);
+
+    if (key < 0x80)
+    {
+        /**
+         * Codes greater then 0x80 are key release codes. Codes less than 0x80 are key press codes.
+         * 
+         * We're ignoring key releases for now.
+         * 
+         */
+        switch (key)
+        {
+        /**
+         * Ignoring Num lock.
+         */
+        case 0x45:
+        case 0xC5:
+            break;
+        /**
+         * Ignoring ACK messages.
+         */
+        case 0xFA:
+            break;
+        default:
+            char *str = "\nKeyboard: 0x__";
+            char *hex = "0123456789ABCDEF";
+            str[13] = hex[(key >> 4) & 0xF];
+            str[14] = hex[key & 0xF];
+            printf(str);
+            break;
+        }
+    }
     return esp;
 }
