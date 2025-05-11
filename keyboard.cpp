@@ -1,5 +1,4 @@
 #include "keyboard.h"
-
 #include "stdio.h"
 
 KeyboardDriver::KeyboardDriver(InterruptManager *manager)
