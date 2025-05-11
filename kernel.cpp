@@ -4,10 +4,9 @@
 #include "keyboard.h"
 #include "stdio.h"
 
-
 /**
  * This piece of code runs all the C++ constructors for any global or static objects.
- * 
+ *
  * start_ctors and end_ctors are defined as labels in the linker.ld file.
  */
 typedef void (*constructor)();
