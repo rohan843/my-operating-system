@@ -1,6 +1,6 @@
 #include "keyboard.h"
 
-void printf(char *);
+#include "stdio.h"
 
 KeyboardDriver::KeyboardDriver(InterruptManager *manager)
     : InterruptHandler(0x21, manager),

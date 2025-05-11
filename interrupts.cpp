@@ -1,6 +1,6 @@
 #include "interrupts.h"
+#include "stdio.h"
 
-void printf(char *str);
 
 InterruptHandler::InterruptHandler(uint8_t interruptNumber, InterruptManager *interruptManager)
 {
