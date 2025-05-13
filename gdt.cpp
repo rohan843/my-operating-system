@@ -1,9 +1,8 @@
 #include "gdt.h"
 
-GlobalDescriptorTable::GlobalDescriptorTable() : nullSegmentSelector(0, 0, 0),
-                                                 unusedSegmentSelector(0, 0, 0),
-                                                 codeSegmentSelector(0, 64 * 1024 * 1024, 0x9A),
-                                                 dataSegmentSelector(0, 64 * 1024 * 1024, 0x92)
+GlobalDescriptorTable::GlobalDescriptorTable()
+    : nullSegmentSelector(0, 0, 0), unusedSegmentSelector(0, 0, 0),
+      codeSegmentSelector(0, 64 * 1024 * 1024, 0x9A), dataSegmentSelector(0, 64 * 1024 * 1024, 0x92)
 {
     /**
      * @brief A 6-byte struct containing the byte vector to be loaded into the GDTR.
@@ -23,12 +22,9 @@ GlobalDescriptorTable::GlobalDescriptorTable() : nullSegmentSelector(0, 0, 0),
      * @brief Loads the contents of above GDT Pointer into the GDTR.
      */
     asm volatile("lgdt %0" : : "m"(ptr));
-
 }
 
-GlobalDescriptorTable::~GlobalDescriptorTable()
-{
-}
+GlobalDescriptorTable::~GlobalDescriptorTable() {}
 
 uint16_t GlobalDescriptorTable::DataSegmentSelector()
 {
@@ -40,8 +36,7 @@ uint16_t GlobalDescriptorTable::CodeSegmentSelector()
     return (uint8_t *)&codeSegmentSelector - (uint8_t *)this;
 }
 
-GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base,
-                                                            uint32_t limit,
+GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base, uint32_t limit,
                                                             uint8_t type)
 {
     uint8_t *target = (uint8_t *)this;

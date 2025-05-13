@@ -9,7 +9,7 @@ This file contains code related to the global descriptor table.
 
 class GlobalDescriptorTable
 {
-public:
+  public:
     /**
      * Desribes how an 8 byte segment entry looks like in the GDT.
      *
@@ -22,7 +22,7 @@ public:
      */
     class SegmentDescriptor
     {
-    private:
+      private:
         uint16_t limit_lo;
         uint16_t base_lo;
         uint8_t base_hi;
@@ -30,7 +30,7 @@ public:
         uint8_t flags_limit_hi;
         uint8_t base_vhi;
 
-    public:
+      public:
         SegmentDescriptor(uint32_t base, uint32_t limit, uint8_t type);
 
         /**
@@ -50,7 +50,7 @@ public:
     SegmentDescriptor codeSegmentSelector;
     SegmentDescriptor dataSegmentSelector;
 
-public:
+  public:
     GlobalDescriptorTable();
     ~GlobalDescriptorTable();
 

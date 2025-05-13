@@ -1,9 +1,9 @@
-#include "types.h"
 #include "gdt.h"
 #include "interrupts.h"
 #include "keyboard.h"
 #include "mouse.h"
 #include "stdio.h"
+#include "types.h"
 
 /**
  * This piece of code runs all the C++ constructors for any global or static objects.

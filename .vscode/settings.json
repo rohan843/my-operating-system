@@ -1,5 +1,6 @@
 {
   "files.eol": "\n",
   "git.autoRepositoryDetection": "openEditors",
-  "git.autorefresh": false
+  "git.autorefresh": false,
+  "C_Cpp.clang_format_fallbackStyle": "{ ColumnLimit: 100, IndentWidth: 4, BreakBeforeBraces: Allman }"
 }

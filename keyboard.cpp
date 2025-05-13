@@ -2,9 +2,7 @@
 #include "stdio.h"
 
 KeyboardDriver::KeyboardDriver(InterruptManager *manager)
-    : InterruptHandler(0x21, manager),
-      dataport(0x60),
-      commandport(0x64)
+    : InterruptHandler(0x21, manager), dataport(0x60), commandport(0x64)
 {
     /**
      * Flushes the keyboard controller's output buffer before the keyboard driver starts.
@@ -47,9 +45,7 @@ KeyboardDriver::KeyboardDriver(InterruptManager *manager)
     dataport.Write(0xF4);
 }
 
-KeyboardDriver::~KeyboardDriver()
-{
-}
+KeyboardDriver::~KeyboardDriver() {}
 
 char us_qwerty_scancode_to_char(uint8_t scancode)
 {

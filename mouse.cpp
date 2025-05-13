@@ -1,9 +1,7 @@
 #include "mouse.h"
 
 MouseDriver::MouseDriver(InterruptManager *manager)
-    : InterruptHandler(0x2C, manager),
-      dataport(0x60),
-      commandport(0x64)
+    : InterruptHandler(0x2C, manager), dataport(0x60), commandport(0x64)
 {
     offset = 0;
     buttons = 0;
@@ -48,9 +46,7 @@ MouseDriver::MouseDriver(InterruptManager *manager)
     dataport.Read();
 }
 
-MouseDriver::~MouseDriver()
-{
-}
+MouseDriver::~MouseDriver() {}
 
 uint32_t MouseDriver::HandleInterrupt(uint32_t esp)
 {
@@ -66,7 +62,10 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp)
         return esp;
     }
 
-    static int8_t x = 0, y = 0;
+    /**
+     * Initial location of the mouse pointer.
+     */
+    static int8_t x = 40, y = 12;
 
     buff[offset] = dataport.Read();
     offset = (offset + 1) % 3;
@@ -75,14 +74,20 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp)
      * Each movement of the mouse generates a 3 byte packet. This goes to the PS/2 controller. The
      * controller generates a separate IRQ12 for each byte. Here, we are placing these bytes in the
      * buffer one by one.
-     * 
+     *
      * If we have all the 3 bytes and the buff array is full, we change the coordinates of the
      * pointer.
      */
-    if(offset == 0)
+    if (offset == 0)
     {
+        uint16_t *VideoMemory = (uint16_t *)0xb8000;
+
         x += buff[1];
         y -= buff[2];
+
+        VideoMemory[80 * y + x] = ((VideoMemory[80 * y + x] & 0xF000) >> 4) |
+                                  ((VideoMemory[80 * y + x] & 0x0F00) << 4) |
+                                  (VideoMemory[80 * y + x] & 0x00FF);
     }
 
     return esp;

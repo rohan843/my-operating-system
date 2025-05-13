@@ -12,7 +12,7 @@
  */
 class Port
 {
-protected:
+  protected:
     /**
      * @brief The 16 - bit port number for this port.
      */
@@ -37,7 +37,7 @@ protected:
  */
 class Port8Bit : public Port
 {
-public:
+  public:
     /**
      * @brief Construct a new Port 8 Bit object.
      *
@@ -67,7 +67,7 @@ public:
  */
 class Port8BitSlow : public Port8Bit
 {
-public:
+  public:
     /**
      * @brief Construct a new Port 8 Bit Slow object.
      *
@@ -91,7 +91,7 @@ public:
  */
 class Port16Bit : public Port
 {
-public:
+  public:
     /**
      * @brief Construct a new Port 16 Bit object.
      *
@@ -121,7 +121,7 @@ public:
  */
 class Port32Bit : public Port
 {
-public:
+  public:
     /**
      * @brief Construct a new Port 32 Bit object.
      *

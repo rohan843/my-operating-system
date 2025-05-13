@@ -1,15 +1,15 @@
 #ifndef __INTERRUPTS_H
 #define __INTERRUPTS_H
 
-#include "types.h"
-#include "port.h"
 #include "gdt.h"
+#include "port.h"
+#include "types.h"
 
 class InterruptManager;
 
 class InterruptHandler
 {
-protected:
+  protected:
     uint8_t interruptNumber;
     InterruptManager *interruptManager;
 
@@ -24,7 +24,7 @@ protected:
     InterruptHandler(uint8_t interruptNumber, InterruptManager *interruptManager);
     ~InterruptHandler();
 
-public:
+  public:
     /**
      * @brief Handles the interrupt associated with an inherited object.
      *
@@ -48,7 +48,7 @@ class InterruptManager
 {
     friend class InterruptHandler;
 
-protected:
+  protected:
     /**
      * Points to the (single) Interrupt Manager object created. (Currently active object in case
      * multiple such objects got created.)
@@ -110,19 +110,18 @@ protected:
      * @param DescriptorPriveledgeLevel Goes from 0 to 3. Lower = more priveledge, 0 for kernel.
      * @param DescriptorType Type of gate (interrupt = 0xE, trap = 0xF, etc.)
      */
-    static void SetInterruptDescriptorTableEntry(
-        uint8_t interruptNumber,
-        uint16_t codeSegmentSelectorOffset,
-        void (*handler)(),
-        uint8_t DescriptorPriveledgeLevel,
-        uint8_t DescriptorType);
+    static void SetInterruptDescriptorTableEntry(uint8_t interruptNumber,
+                                                 uint16_t codeSegmentSelectorOffset,
+                                                 void (*handler)(),
+                                                 uint8_t DescriptorPriveledgeLevel,
+                                                 uint8_t DescriptorType);
 
     Port8BitSlow picMasterCommand;
     Port8BitSlow picMasterData;
     Port8BitSlow picSlaveCommand;
     Port8BitSlow picSlaveData;
 
-public:
+  public:
     InterruptManager(GlobalDescriptorTable *gdt);
     ~InterruptManager();
 

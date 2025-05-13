@@ -17,21 +17,17 @@ InterruptHandler::~InterruptHandler()
     }
 }
 
-uint32_t InterruptHandler::HandleInterrupt(uint32_t esp)
-{
-    return esp;
-}
+uint32_t InterruptHandler::HandleInterrupt(uint32_t esp) { return esp; }
 
 InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256];
 
 InterruptManager *InterruptManager::ActiveInterruptManager = 0;
 
-void InterruptManager::SetInterruptDescriptorTableEntry(
-    uint8_t interruptNumber,
-    uint16_t codeSegmentSelectorOffset,
-    void (*handler)(),
-    uint8_t DescriptorPriveledgeLevel,
-    uint8_t DescriptorType)
+void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interruptNumber,
+                                                        uint16_t codeSegmentSelectorOffset,
+                                                        void (*handler)(),
+                                                        uint8_t DescriptorPriveledgeLevel,
+                                                        uint8_t DescriptorType)
 {
 
     /**
@@ -50,10 +46,7 @@ void InterruptManager::SetInterruptDescriptorTableEntry(
 }
 
 InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
-    : picMasterCommand(0x20),
-      picMasterData(0x21),
-      picSlaveCommand(0xA0),
-      picSlaveData(0xA1)
+    : picMasterCommand(0x20), picMasterData(0x21), picSlaveCommand(0xA0), picSlaveData(0xA1)
 {
     uint16_t CodeSegment = gdt->CodeSegmentSelector();
     /**
@@ -68,32 +61,20 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
     {
         this->handlers[i] = 0;
         this->SetInterruptDescriptorTableEntry(
-            (uint8_t)i,
-            CodeSegment,
-            &this->IgnoreInterruptRequest,
-            0,
-            IDT_INTERRUPT_GATE);
+            (uint8_t)i, CodeSegment, &this->IgnoreInterruptRequest, 0, IDT_INTERRUPT_GATE);
     }
 
     /**
      * Timer interrupt.
      */
-    this->SetInterruptDescriptorTableEntry(
-        0x20,
-        CodeSegment,
-        &this->HandleInterruptRequest0x00,
-        0,
-        IDT_INTERRUPT_GATE);
+    this->SetInterruptDescriptorTableEntry(0x20, CodeSegment, &this->HandleInterruptRequest0x00, 0,
+                                           IDT_INTERRUPT_GATE);
 
     /**
      * Keyboard interrupt.
      */
-    this->SetInterruptDescriptorTableEntry(
-        0x21,
-        CodeSegment,
-        &this->HandleInterruptRequest0x01,
-        0,
-        IDT_INTERRUPT_GATE);
+    this->SetInterruptDescriptorTableEntry(0x21, CodeSegment, &this->HandleInterruptRequest0x01, 0,
+                                           IDT_INTERRUPT_GATE);
 
     /**
      * Initializes the 2 PICs to operate in cascade mode. They will expect 3 more control words (
@@ -141,9 +122,7 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
     asm volatile("lidt %0" : : "m"(idt));
 }
 
-InterruptManager::~InterruptManager()
-{
-}
+InterruptManager::~InterruptManager() {}
 
 void InterruptManager::Activate()
 {
