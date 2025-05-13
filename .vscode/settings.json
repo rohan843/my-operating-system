@@ -2,5 +2,5 @@
   "files.eol": "\n",
   "git.autoRepositoryDetection": "openEditors",
   "git.autorefresh": false,
-  "C_Cpp.clang_format_fallbackStyle": "{ ColumnLimit: 100, IndentWidth: 4, BreakBeforeBraces: Allman }"
+  "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: LLVM, ColumnLimit: 100, IndentWidth: 4, BreakBeforeBraces: Allman }"
 }
