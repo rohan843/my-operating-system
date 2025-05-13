@@ -6,6 +6,12 @@ MouseDriver::MouseDriver(InterruptManager *manager)
     offset = 0;
     buttons = 0;
 
+    uint16_t *VideoMemory = (uint16_t *)0xb8000;
+
+    VideoMemory[80 * 12 + 40] = ((VideoMemory[80 * 12 + 40] & 0xF000) >> 4) |
+                                ((VideoMemory[80 * 12 + 40] & 0x0F00) << 4) |
+                                (VideoMemory[80 * 12 + 40] & 0x00FF);
+
     /**
      * Tests the mouse port of the PS/2 controller.
      */
@@ -82,8 +88,30 @@ uint32_t MouseDriver::HandleInterrupt(uint32_t esp)
     {
         uint16_t *VideoMemory = (uint16_t *)0xb8000;
 
+        VideoMemory[80 * y + x] = ((VideoMemory[80 * y + x] & 0xF000) >> 4) |
+                                  ((VideoMemory[80 * y + x] & 0x0F00) << 4) |
+                                  (VideoMemory[80 * y + x] & 0x00FF);
+
         x += buff[1];
+        if (x < 0)
+        {
+            x = 0;
+        }
+        if (x >= 80)
+        {
+            x = 79;
+        }
+
         y -= buff[2];
+
+        if (y < 0)
+        {
+            y = 0;
+        }
+        if (y >= 25)
+        {
+            y = 24;
+        }
 
         VideoMemory[80 * y + x] = ((VideoMemory[80 * y + x] & 0xF000) >> 4) |
                                   ((VideoMemory[80 * y + x] & 0x0F00) << 4) |

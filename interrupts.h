@@ -171,6 +171,13 @@ class InterruptManager
     static void HandleInterruptRequest0x01();
 
     /**
+     * @brief The mouse interrupt handler.
+     *
+     * This is defined in assembly in the file "interruptstubs.s"
+     */
+    static void HandleInterruptRequest0x0C();
+
+    /**
      * @brief Ignores a given interrupt.
      *
      * This is defined in assembly in the file "interruptstubs.s"

@@ -77,6 +77,12 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
                                            IDT_INTERRUPT_GATE);
 
     /**
+     * Mouse interrupt.
+     */
+    this->SetInterruptDescriptorTableEntry(0x2C, CodeSegment, &this->HandleInterruptRequest0x0C, 0,
+                                           IDT_INTERRUPT_GATE);
+
+    /**
      * Initializes the 2 PICs to operate in cascade mode. They will expect 3 more control words (
      * sent below).
      */
