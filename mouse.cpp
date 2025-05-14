@@ -6,8 +6,10 @@ MouseDriver::MouseDriver(InterruptManager *manager)
     offset = 0;
     buttons = 0;
 
+    /**
+     * Displaying the mouse at the center of the screen initially.
+     */
     uint16_t *VideoMemory = (uint16_t *)0xb8000;
-
     VideoMemory[80 * 12 + 40] = ((VideoMemory[80 * 12 + 40] & 0xF000) >> 4) |
                                 ((VideoMemory[80 * 12 + 40] & 0x0F00) << 4) |
                                 (VideoMemory[80 * 12 + 40] & 0x00FF);
@@ -46,6 +48,7 @@ MouseDriver::MouseDriver(InterruptManager *manager)
      * Enables data reporting by mouse.
      */
     dataport.Write(0xF4);
+
     /**
      * Reads and ignores the ACK from mouse.
      */
